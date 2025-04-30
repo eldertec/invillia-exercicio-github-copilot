@@ -4,6 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+  // Utility function to sanitize HTML
+  function sanitizeHTML(str) {
+    const tempDiv = document.createElement("div");
+    tempDiv.textContent = str;
+    return tempDiv.innerHTML;
+  }
+
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
@@ -25,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
           ? `<div class="participants">
                <strong>Participants:</strong>
                <ul>
-                 ${details.participants.map(participant => `<li>${participant}</li>`).join("")}
+                 ${details.participants.map(participant => `<li>${sanitizeHTML(participant)}</li>`).join("")}
                </ul>
              </div>`
           : `<p><strong>Participants:</strong> No participants yet</p>`;
