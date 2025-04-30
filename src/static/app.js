@@ -4,6 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+  // Utility function to sanitize HTML
+  function sanitizeHTML(str) {
+    const tempDiv = document.createElement("div");
+    tempDiv.textContent = str;
+    return tempDiv.innerHTML;
+  }
+
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
@@ -20,11 +27,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        // Create participants component
+        const participantsComponent = details.participants.length
+          ? `<div class="participants">
+               <strong>Participants:</strong>
+               <ul>
+                 ${details.participants.map(participant => `<li>${sanitizeHTML(participant)}</li>`).join("")}
+               </ul>
+             </div>`
+          : `<p><strong>Participants:</strong> No participants yet</p>`;
+
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          ${participantsComponent}
         `;
 
         activitiesList.appendChild(activityCard);
